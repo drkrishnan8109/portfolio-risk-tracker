@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import hashlib
 import io
-from pathlib import Path
 
 import pandas as pd
 import streamlit as st
@@ -31,7 +30,7 @@ from src.narrative.client import build_client
 from src.narrative.explain import explain
 from src.risk.engine import analyse
 from src.risk.valuation import value_portfolio
-from src.store import portfolio_csv, save_portfolio, saved_portfolio_path
+from src.store import portfolio_csv
 from src.viz import charts
 from src.viz.info import SEVERITY_ICONS, finding_help, help_for, severity_help
 
@@ -153,13 +152,20 @@ st.sidebar.caption(f"**Narrative:** {client_status.mode_label}")
 if client_status.reason:
     st.sidebar.caption(client_status.reason)
 
-source_bytes: bytes | None = None
+# The portfolio lives in session state, which is per browser session and never
+# touches the server's disk. Writing it to a file would serve one visitor's
+# holdings to the next one - this app has no accounts and no per-user storage.
 if uploaded is not None:
-    source_bytes = uploaded.getvalue()
-    st.session_state["has_upload"] = True
-elif (previous := saved_portfolio_path()) is not None:
-    source_bytes = Path(previous).read_bytes()
-    st.sidebar.info("Showing the last portfolio you analysed.")
+    st.session_state["portfolio_bytes"] = uploaded.getvalue()
+
+source_bytes: bytes | None = st.session_state.get("portfolio_bytes")
+
+if source_bytes is not None:
+    if st.sidebar.button("Clear portfolio", width="stretch"):
+        for key in ("portfolio_bytes", "reported_issues", "reported_failure"):
+            st.session_state.pop(key, None)
+        st.rerun()
+    st.sidebar.caption("Held for this browser session only. Closing the tab clears it.")
 
 # ---------------------------------------------------------------- body
 
@@ -194,8 +200,6 @@ except FileValidationError as exc:
     st.stop()
 
 currency = analysis.base_currency
-if uploaded is not None:
-    save_portfolio(analysis.portfolio)
 
 diagnostics = diagnose(loaded, analysis.portfolio)
 

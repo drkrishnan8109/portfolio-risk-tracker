@@ -57,7 +57,13 @@ def write_portfolio_csv(portfolio: ValuedPortfolio, path: Path) -> Path:
 
 
 def save_portfolio(portfolio: ValuedPortfolio, *, data_dir: Path | None = None) -> Path:
-    """Persist the current portfolio so the next session reloads it."""
+    """Persist a portfolio to local disk.
+
+    **Never call this from the Streamlit app.** The app has no accounts, so a file on
+    the server is shared by every visitor: one person's holdings would be served to the
+    next. The app keeps the portfolio in `st.session_state`, which is per browser
+    session. This helper exists for local scripting only.
+    """
     directory = data_dir or DATA_DIR
     return write_portfolio_csv(portfolio, directory / PORTFOLIO_FILE)
 
