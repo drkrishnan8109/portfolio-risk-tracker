@@ -7,6 +7,12 @@ Upload a CSV of what you hold. Get back two things:
 
 Every figure is computed in Python. Claude only rephrases the findings into plain English, and the app runs completely without it.
 
+**Try it:** https://your-portfolio-tracker.streamlit.app/ — no sign-up. Bring a CSV, or use one of the
+[example portfolios](tests/fixtures/portfolios/) below.
+
+Your data is not stored. The uploaded portfolio lives in your browser session only: it is never
+written to the server, never shared between visitors, and is gone when you close the tab.
+
 ---
 
 ## Quick start
@@ -181,6 +187,56 @@ Refreshing prices changes expected metric values — update the expectation tabl
 
 Personal portfolio files are git-ignored (see `.gitignore`). Any test that depends on one skips
 with a hint when it is absent, so a fresh clone passes without it.
+
+---
+
+## Deploying
+
+The app is hosted on [Streamlit Community Cloud](https://share.streamlit.io), connected to this
+repository's `main` branch.
+
+**You do not redeploy manually.** Streamlit watches the branch and rebuilds within about a minute
+of every push. A rebuild restarts the container, which also clears `@st.cache_data` and
+`@st.cache_resource`, so no stale prices survive a deploy.
+
+| Change | What happens |
+|---|---|
+| Push to `main` | Auto-rebuild and restart |
+| Edit `requirements.txt` | Same, plus a dependency reinstall (slower cold start) |
+| Change a secret in the dashboard | App restarts; no push needed |
+| App idle for a while (free tier) | Sleeps, then wakes on the next visit with the latest code |
+
+If a deploy fails the app keeps serving the previous build — check **Manage app → Logs** for the
+traceback.
+
+### Secrets
+
+`.env` is git-ignored, so the deployed app has no API key by default and renders risk bullets from
+templates. To enable the Claude-written version, add it in the dashboard rather than in the repo:
+
+**Manage app → Settings → Secrets**
+
+```toml
+ANTHROPIC_API_KEY = "sk-ant-..."
+```
+
+Streamlit exposes secrets to the process as environment variables, which is what
+[`src/narrative/client.py`](src/narrative/client.py) reads. The sidebar shows which mode is active,
+so you can confirm it took effect. Never commit the key — the repo is the wrong place for it even
+when private.
+
+### Sharing
+
+A Community Cloud app is public by default: anyone with the URL can use it. To restrict it, use
+**Manage app → Settings → Sharing** and invite specific email addresses.
+
+### Nothing is stored server-side
+
+The app keeps the uploaded portfolio in `st.session_state`, which is per browser session. It is
+deliberately **not** written to disk. With no accounts, a file on the server would be shared by
+every visitor — one person's holdings served to the next. `save_portfolio()` in
+[`src/store.py`](src/store.py) exists for local scripting only and carries a warning against
+calling it from the app.
 
 ---
 
