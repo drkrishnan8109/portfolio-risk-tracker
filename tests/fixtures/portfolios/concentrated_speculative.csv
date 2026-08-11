@@ -1,0 +1,12 @@
+ticker,name,quantity,cost_basis,base_currency,asset_class,theme,isin
+NVDA,NVIDIA Corporation,350,41200.00,USD,EQUITY,AI/Semiconductors,US67066G1040
+PLTR,Palantir Technologies Inc.,250,28750.00,USD,EQUITY,AI/Semiconductors,US69608A1088
+TSLA,"Tesla, Inc.",120,44400.00,USD,EQUITY,EV/Growth,US88160R1014
+COIN,"Coinbase Global, Inc.",200,31000.00,USD,EQUITY,Crypto,US19260Q1076
+MSTR,Strategy Inc,300,36900.00,USD,EQUITY,Crypto,US5949724083
+IBIT,iShares Bitcoin Trust ETF,900,28800.00,USD,CRYPTO_ETP,Crypto,US4642871515
+RIOT,"Riot Platforms, Inc.",800,,USD,EQUITY,Crypto,US7672921050
+ARKK,ARK Innovation ETF,200,15600.00,USD,ETF,EV/Growth,US00214Q1040
+SMCI,"Super Micro Computer, Inc.",400,,USD,EQUITY,AI/Semiconductors,US86800U3023
+GME,GameStop Corp.,500,11250.00,USD,EQUITY,Meme,US36467W1099
+XYZQ.FAKE,Delisted Holding Co.,100,4000.00,USD,EQUITY,Legacy/Distressed,

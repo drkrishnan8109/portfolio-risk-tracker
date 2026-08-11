@@ -1,0 +1,37 @@
+# --- real financial data: never commit -------------------------------------
+# The real portfolio fixture is derived from a personal brokerage export. Tests
+# that need it skip when it is absent; regenerate with
+#   python tools/build_portfolio_from_scalable.py
+tests/fixtures/portfolios/real_scalable.csv
+
+# Broker exports, wherever they land
+*Transactions*.csv
+*ScalableCapital*.csv
+*.private.csv
+
+# Saved app state: the last portfolio analysed, cached prices, ticker fixes
+data/
+
+# --- secrets ---------------------------------------------------------------
+.env
+.env.local
+
+# --- python ----------------------------------------------------------------
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.hypothesis/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# --- editors / os ----------------------------------------------------------
+.DS_Store
+.idea/
+.vscode/
+*.swp

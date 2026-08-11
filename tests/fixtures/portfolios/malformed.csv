@@ -1,0 +1,10 @@
+quantity,ticker,cost_basis,name,broker_note,base_currency
+40,AAPL,7920.00,Apple Inc.,ignore this column,USD
+25,AAPL,4100.00,Apple Inc. (second lot),duplicate ticker - must aggregate,USD
+0,MSFT,0.00,Microsoft Corporation,zero quantity - must reject,USD
+-15,GOOG,3000.00,Alphabet Inc.,negative quantity - must reject,USD
+abc,META,1000.00,Meta Platforms,non-numeric quantity - must reject,USD
+30,,2500.00,Missing Ticker Inc.,blank ticker - must reject,USD
+"1,250",PEP,"12,500.00",PepsiCo Inc.,thousands separators - must parse,USD
+
+12,JNJ,,Johnson & Johnson,blank cost_basis - allowed,USD
