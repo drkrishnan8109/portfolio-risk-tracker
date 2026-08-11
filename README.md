@@ -240,6 +240,14 @@ calling it from the app.
 
 ---
 
+## How this was built
+
+[`BUILD_NOTES.md`](BUILD_NOTES.md) records the process: the prompts used, how the spec changed
+when real data arrived, which defects the tests caught that review did not, and what would be
+done differently.
+
+---
+
 ## Design notes
 
 ### Theme beats sector
